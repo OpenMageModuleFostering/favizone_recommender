@@ -51,9 +51,17 @@ function FavizoneRenderer(url, post_data){
                                 if( typeof ($jq(document).on)!="undefined"){
 
                                     $jq(document).on('click', "#"+key + " [data-context=favizone]", {"key":key} , function(event) {
-
-                                        document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/";
-                                        document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/";
+                                        if(typeof(favizone_searcher)!="undefined"){
+                                            favizone_searcher.setCookie("favizone_id_recommendor", event.data.key);
+                                            favizone_searcher.setCookie("favizone_id_product", $jq(this).attr("favizone-ref"));
+                                        } else {
+                                            var domain=  window.location.hostname ;
+                                            document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/"+" ; domain=" + domain + "; ";
+                                            document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/"+" ; domain=" + domain + "; ";
+                                            document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/"+" ; domain=." + domain + "; ";
+                                            document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/"+" ; domain=." + domain + "; ";  
+                                        }
+                                       
                                         return true;
                                     });
                                 }
@@ -61,8 +69,17 @@ function FavizoneRenderer(url, post_data){
                                     //old version of jquery
                                     $jq(document).delegate("#"+key + " [data-context=favizone]", 'click', {"key":key}, function(event) {
 
-                                        document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/";
-                                        document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/";
+                                        if(typeof(favizone_searcher)!="undefined"){
+                                            favizone_searcher.setCookie("favizone_id_recommendor", event.data.key);
+                                            favizone_searcher.setCookie("favizone_id_product", $jq(this).attr("favizone-ref"));
+                                        } else {
+                                            var domain=  window.location.hostname ;
+                                            document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/"+" ; domain=" + domain + "; ";
+                                            document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/"+" ; domain=" + domain + "; ";
+                                            document.cookie = "favizone_id_recommendor="+event.data.key+ "; path=/"+" ; domain=." + domain + "; ";
+                                            document.cookie = "favizone_id_product="+$jq(this).attr("favizone-ref")+ "; path=/"+" ; domain=." + domain + "; ";
+                                        }
+
                                         return true;
                                     });
                                 }
@@ -92,7 +109,7 @@ function FavizoneRenderer(url, post_data){
 
         request.setRequestHeader("Content-type", "application/json");
         request.setRequestHeader("Accept", "*/*");
-        request.setRequestHeader("Connection", "close");
+        //request.setRequestHeader("Connection", "close");
         request.timeout = 4000;
         request.ontimeout = function () { console.log("Timed out!!!"); }
         var favizone_helper = new FavizoneHelper();
@@ -105,8 +122,16 @@ function FavizoneRenderer(url, post_data){
 }
 
 function setData(param, key){
+    if(typeof(favizone_searcher)!="undefined"){
+        favizone_searcher.setCookie("favizone_id_recommendor", key);
+        favizone_searcher.setCookie("favizone_id_product", param.getAttribute("favizone-ref"));
+    } else {
+        var domain= window.location.hostname ;
+        document.cookie = "favizone_id_recommendor="+key+ "; path=/"+" ; domain=" + domain + "; ";
+        document.cookie = "favizone_id_product="+param.getAttribute("favizone-ref")+ "; path=/"+" ; domain=" + domain + "; ";
+        document.cookie = "favizone_id_recommendor="+key+ "; path=/"+" ; domain=." + domain + "; ";
+        document.cookie = "favizone_id_product="+param.getAttribute("favizone-ref")+ "; path=/"+" ; domain=." + domain + "; ";  
+    }
     
-    document.cookie = "favizone_id_recommendor="+key+ "; path=/";
-    document.cookie = "favizone_id_product="+param.getAttribute("favizone-ref")+ "; path=/";
     return true;
 }

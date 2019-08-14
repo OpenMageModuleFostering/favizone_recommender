@@ -30,12 +30,12 @@
         if(typeof(visit_event)  == "undefined"){
             var store_id = "<?php echo Mage::app()->getStore()->getId()?>";
             var visit_event  =favizone_searcher.getCookie("favizone_visit_"+store_id);
-            if(visit_event  && visit_event!=""){
+            if(visit_event  && visit_event.length>0){
 
                 visit_event  = "<?php echo $this->getVisitEvent()?>";
                 favizone_events.push(visit_event);
                 var expiry_date = "<?php echo $this->getCookiesExpirationTime();?>";
-                favizone_searcher.setCookie("favizone_visit_"+store_id, "", expiry_date);
+                favizone_searcher.setCookie("favizone_visit_"+store_id, "");
             }
         }
         

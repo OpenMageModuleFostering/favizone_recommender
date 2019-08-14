@@ -109,11 +109,10 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
                 //synchronizing data
                 //orders
                 Mage::helper('favizone_recommender/order')->sendOrdersData($store->getId());
-                //products
-                Mage::helper('favizone_recommender/product')->initTaggingProductData($store);
-
                 //categories
                 Mage::helper('favizone_recommender/category')->sendCategoriesData($store->getId());
+                //products
+                Mage::helper('favizone_recommender/product')->initTaggingProductData($store);
             }
 
             //Preparing response

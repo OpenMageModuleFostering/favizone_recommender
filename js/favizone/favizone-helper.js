@@ -30,7 +30,7 @@ function FavizoneHelper(){
             expires = new Date(expires.getTime() + expiry_time * 1000);
         }  else {
             var today = new Date();
-            expires = new Date(today.getTime() + 15 * 24 * 60 * 60 * 1000);
+            expires = new Date(today.getTime() + 365 * 24 * 60 * 60 * 1000);
         }
       
         expires = expires.toGMTString();
@@ -66,7 +66,10 @@ function FavizoneHelper(){
 
         var cookieStr = cname + "=" + escape(cvalue) + "; ";
         if(expires){
-            cookieStr += "expires=" + expires + "; ";
+            if(cvalue.length==0)
+               cookieStr += "expires=Thu, 01-Jan-70 00:00:01 GMT" + "; ";
+            else    
+                cookieStr += "expires=" + expires + "; ";
         }
         if(path){
             cookieStr += "path=" + path + "; ";
@@ -76,5 +79,12 @@ function FavizoneHelper(){
         }
 
         return cookieStr;
+    }
+
+
+    this.clearCookie = function(cname) {
+        if(this.getCookie(cname)){
+            document.cookie = name + "=" +"; expires=Thu, 01-Jan-70 00:00:01 GMT";
+        }
     }
 }

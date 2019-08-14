@@ -58,6 +58,15 @@ class  Favizone_Recommender_Helper_Data extends Mage_Core_Helper_Abstract
                              ,"custom_design","custom_design_from","custom_design_to"
                              ,"custom_layout_update","page_layout","options_container"
                              ,"gift_message_available","gift_wrapping_available","gift_wrapp");
+    
+    /**
+     * @return string
+     */
+    public function getLifeTime()
+    {
+        $lifeTime =    365 * 24 * 60 * 60;
+        return $lifeTime ;
+    }
 
     /**
      * @return string

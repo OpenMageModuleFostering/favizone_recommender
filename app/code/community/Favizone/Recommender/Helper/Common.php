@@ -67,7 +67,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             $result = json_decode($result,true);
             if($result['response'] == 'authorized' || $result['response'] == 'success' ){
 
-                $cookie->set('favizone_connection_identifier_'.$store_id, $result['identifier'], null, '/', null, false, false);
+                $cookie->set('favizone_connection_identifier_'.$store_id, $result['identifier'], Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
 
                 $abTest = $this->getStoreInfo($store_id)->getAbTest();
                 $abTest = ($abTest == 'true');
@@ -75,11 +75,10 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
 
                     $cookie->set('favizone_visit_'.$store_id, true, null, '/', null, false, false);
                 }
-                    
+                   
                 $sessionIdentifier = $result['identifier'];
             }
         }
-
         return $sessionIdentifier;
     }
 
@@ -119,7 +118,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
                     if($current_version == 'N'){
 
                         $current_version = $this->get_random_version();
-                        Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, null, '/', null, false, false);
+                        Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
                         Mage::getModel('core/cookie')->set('favizone_visit_'.$store->getId(), true, null, '/', null, false, false);
 
                     }
@@ -127,7 +126,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
                 else{
 
                     $current_version = $this->get_random_version();
-                    Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, null, '/', null, false, false);
+                    Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
                 }
             }
             //A/B test is inactive
@@ -136,7 +135,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
                 if($current_version != 'N'){
 
                     $current_version = 'N';
-                    Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, null, '/', null, false, false);
+                    Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
                 }
             }
 
@@ -149,7 +148,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             if($abTest){
 
                 $current_version = $this->get_random_version();
-                Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, null, '/', null, false, false);
+                Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
                 Mage::getModel('core/cookie')->set('favizone_visit_'.$store->getId(), true, null, '/', null, false, false);
 
             }
@@ -157,7 +156,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             else{
 
                 $current_version = 'N';
-                Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, null, '/', null, false, false);
+                Mage::getModel('core/cookie')->set('favizone_AB_'.$store->getId(), $current_version, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
             }
 
             return $current_version;
@@ -239,7 +238,7 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
 
         if (isset($_GET['favizone_preview']) && $_GET['favizone_preview'] == "true") {
 
-            $cookie->set('favizone_preview', true, null, '/', null, false, false);
+            $cookie->set('favizone_preview', true, Favizone_Recommender_Helper_Data::getLifeTime(), '/', null, false, false);
             return true;
         }
         if (isset($_GET['favizone_preview']) && $_GET['favizone_preview'] == "false") {
