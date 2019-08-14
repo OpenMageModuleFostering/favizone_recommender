@@ -125,7 +125,7 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
                                                         ->getPrice($product, $product->getPrice());
             $product_data['reduction'] =  $product_data['price_without_reduction'] - $product_data['price'];
             
-            if($product->getSpecialToDate()){
+            if($product->getSpecialFromDate()){
                 
                 $product_data['reduction_from_date'] = (new DateTime($product->getSpecialFromDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
             }
