@@ -89,7 +89,7 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
         }
 
         //Categories
-        $categories = $this->getProductCategories($product);
+        $categories = $this->getProductCategories($product, $store);
         $product_data['categoriesNames'] = $categories['categories_names'];
         $product_data['categories']= $categories['categories_ids'];
 
@@ -287,7 +287,7 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
             array_push($product_data, "");
 
         //Categories
-        $categories = $this->getProductCategories($product);
+        $categories = $this->getProductCategories($product, $store);
         array_push($product_data, implode(";", $categories['categories_names']));
         array_push($product_data, implode(";", $categories['categories_ids']));
 
@@ -521,17 +521,64 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
         return $url;
     }
 
-    protected function getProductCategories($product){
+    protected function getProductCategories($product, Mage_Core_Model_Store $store){ 
 
-        $categories = array('categories_names'=> array(), 'categories_ids'=>array());
-        $categories_collection = $product->getCategoryCollection()
-            ->addAttributeToSelect('name');
-        foreach ($categories_collection as $category) {
+        $categoriesData  = array('categories_identifiers'=> array(), 'categories_names' => array(), 'categories_ids'=>array());
+        $pathArray = array();
+        $idPathArray = array();
+        $collection1 = $product->getCategoryCollection()
+            ->setStoreId($store->getId())
+            ->addAttributeToSelect('path')
+            ->addAttributeToSelect('is_active');
+            
 
-            array_push($categories['categories_ids'], $category->getId());
-            array_push($categories['categories_names'], $category->getName());
+        foreach($collection1 as $cat1){ 
+            array_push($categoriesData['categories_ids'], $cat1->getId());           
+            $pathIds = explode('/', $cat1->getPath());            
+            $collection = Mage::getModel('catalog/category')->getCollection()
+                ->setStoreId($store->getId())
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('is_active')
+                ->addFieldToFilter('entity_id', array('in' => $pathIds));
+
+            $pahtByName = '';
+            foreach($collection as $cat){                
+                $pahtByName .= '/' . $cat->getName();
+            }
+            if($pahtByName[0]==='/')
+                $pahtByName = substr($pahtByName, 1);
+            $pathArray[] = $pahtByName;
+            $idPathArray[] = $cat1->getPath();
+
+        }      
+        $unique = true;
+        for ($i=0; $i <count($pathArray) ; $i++) { 
+            for ($j=$i+1; $j <count($pathArray); $j++) { 
+               if (strpos($pathArray[$j], $pathArray[$i]) !== false) {
+                $unique = false;
+                break;
+               }
+            }
+            if($unique === true){
+                array_push($categoriesData['categories_names'], $pathArray[$i]);
+            } 
+            $unique = true; 
         }
-        return $categories;
+
+        $unique = true;
+        for ($i=0; $i <count($idPathArray) ; $i++) { 
+            for ($j=$i+1; $j <count($idPathArray); $j++) { 
+               if (strpos($idPathArray[$j], $idPathArray[$i]) !== false) {
+                $unique = false;
+                break;
+               }
+            }
+            if($unique === true){
+                array_push($categoriesData['categories_identifiers'], $idPathArray[$i]);
+            } 
+            $unique = true; 
+        }
+        return $categoriesData;
     }
 
     protected function getProductName($productId, $storeId){
