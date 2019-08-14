@@ -12,7 +12,6 @@ function Tracker(session, key, events, apiUrl){
     this.apiUrl = apiUrl;
 
     this.sendAction = function(){
-
         /** checks if session_identifier and version is well defined **/
         var favizone_searcher = new FavizoneHelper();
         var favizone_connection_identifier = favizone_searcher.getCookie("favizone_connection_identifier_"+store_id);
@@ -29,6 +28,7 @@ function Tracker(session, key, events, apiUrl){
                 this.events[i] = current_event;
 
             }
+
             this.process_sending();
        }
     }
@@ -55,6 +55,10 @@ function Tracker(session, key, events, apiUrl){
             sending_data.user_data = this.user_data;
         }
 
+        if (this.favizone_facebook_profile) {
+            sending_data.favizone_facebook_profile = this.favizone_facebook_profile;
+        }
+
         if(typeof(this.product_data) != "undefined"){
             sending_data['product'] = this.product_data;
         }
@@ -74,9 +78,9 @@ function Tracker(session, key, events, apiUrl){
         };
 
         var params = JSON.stringify(sending_data);
-        request.setRequestHeader("Content-type", "application/json");
-        request.setRequestHeader("Content-length", params.length);
-        request.setRequestHeader("Connection", "close");
+        //request.setRequestHeader("Content-type", "application/json");
+        //request.setRequestHeader("Content-length", params.length);
+       // request.setRequestHeader("Connection", "close");
         request.timeout = 3000;
         request.ontimeout = function () {
             //timeout

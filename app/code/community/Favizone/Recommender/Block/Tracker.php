@@ -137,6 +137,12 @@ class Favizone_Recommender_Block_Tracker extends Mage_Core_Block_Template
                 $result['product_data']= $favizone_product;
                 break;
         }
+        /** searching for keywords coming from FB messenger */
+        if(!is_null($_GET['fz_p'])){
+
+            $result['favizone_facebook_profile'] = $_GET['fz_p'];
+        }
+
         /** searching for keywords coming from campaigns */
         if(!is_null($_GET['favizone'])){
 

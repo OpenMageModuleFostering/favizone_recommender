@@ -101,6 +101,7 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
                 "idParent"=>$category->getParentId(),
                 "nameCategory"=>$category->getName(),
                 "level"=>$category->getLevel(),
+                "image"=>($category->getImageUrl()?$category->getImageUrl():''),
                 "isCategoryRoot"=>$isRoot
             ));
         }
@@ -114,6 +115,7 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
             "idParent"=>$rootCategory->getParentId(),
             "nameCategory"=>$rootCategory->getName(),
             "level"=>$rootCategory->getLevel(),
+            "image"=>($rootCategory->getImageUrl()?$rootCategory->getImageUrl():''),
             "isCategoryRoot"=>1
         ));
 
@@ -146,6 +148,7 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
                     "idParent"=>$category->getParentId(),
                     "nameCategory"=>$category->getName(),
                     "level"=>$category->getLevel(),
+                    "image"=>($category->getImageUrl()?$category->getImageUrl():''),
                     "isCategoryRoot"=>$isRoot
                 )
             );

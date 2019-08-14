@@ -49,8 +49,11 @@
         if(custom_data.search_engine){
             favizone_tracker.search_engine_value = custom_data.search_engine_value;
         }
+        if(custom_data.favizone_facebook_profile){
+            favizone_tracker.favizone_facebook_profile = custom_data.favizone_facebook_profile;
+        }
     }
-
+ 
     if(favizone_events.length>0)
         favizone_tracker.sendAction();
 </script>

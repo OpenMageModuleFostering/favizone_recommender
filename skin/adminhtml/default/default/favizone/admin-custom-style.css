@@ -229,7 +229,7 @@ input#ab_test_off {
     width: 50%;
 }
 .favizone-help{
-    color: #ec751e !important;
+    color: #00bbd3 !important;
 }
 .favizone_preview{
 
@@ -472,7 +472,7 @@ clear: both;
     width: 55%;
 }
 #favizone_preview_section .favizone-help {
-    color: #ec751e !important;
+    color: #00bbd3 !important;
 }
 #favizone_preview_section {
     -webkit-box-shadow: 5px 3px 64px -4px rgba(0, 0, 0, 0.41);
