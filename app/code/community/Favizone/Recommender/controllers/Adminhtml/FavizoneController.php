@@ -22,7 +22,6 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
      */
     public function indexAction()
     {
-        $customer = Mage::getModel('customer/customer')->load(135);
         if (!Favizone_Recommender_Block_Common::getSelectedStore()) {
             // If we are not under a store view, then redirect to the first
             // found one because Favizone is configured per store.
@@ -69,7 +68,6 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
         $element = Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId());
         $ab_test_new_status = $this->getRequest()->getParam('ab_test');
         $ab_test_old_status = $element->getAbTest();
-
         if($ab_test_new_status == 'true'){
             if($ab_test_old_status != $ab_test_new_status) {
                 $element->setAbTest($ab_test_new_status);
@@ -113,6 +111,7 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
                 Mage::helper('favizone_recommender/order')->sendOrdersData($store->getId());
                 //products
                 Mage::helper('favizone_recommender/product')->initTaggingProductData($store);
+
                 //categories
                 Mage::helper('favizone_recommender/category')->sendCategoriesData($store->getId());
             }
@@ -137,6 +136,7 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
     * Reset Extension data
     */
     public  function resetDataAction(){
+
         $this->getResponse()->setHeader('Content-type', 'application/json');
         $store = Favizone_Recommender_Block_Common::getSelectedStore();
         Mage::helper('favizone_recommender/common')->resetData($store->getId());
@@ -146,6 +146,26 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
             'success' => true,
         );
         $this->getResponse()->setBody(json_encode($responseData));
+    }
+
+    public function exportProductsToCsv(){
+        $limit = 500;
+        $store = Favizone_Recommender_Block_Common::getSelectedStore();
+        $products_count = Mage::helper('favizone_recommender/product')->getCountAvailableProducts($store->getId()) ;
+        $pagination = (int) ($products_count / $limit);
+        if($products_count%$limit>0)
+          $pagination += 1;
+        //$products_collections = array();
+        $products_collections = "";
+        
+       foreach (range(1, $pagination) as $offset) {
+            $products = Mage::helper('favizone_recommender/product')->exportProducts($store, $limit, $offset);
+           // $products_collections = array_merge($products_collections, $products);
+             $products_collections .= $products;
+       }
+    
+        Mage::helper('favizone_recommender/export')
+            ->exportDataToCsv($store, $products_collections);
     }
 
     /**

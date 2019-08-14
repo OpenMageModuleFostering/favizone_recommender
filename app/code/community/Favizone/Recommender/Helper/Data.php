@@ -17,7 +17,6 @@
 class  Favizone_Recommender_Helper_Data extends Mage_Core_Helper_Abstract
 
 {
-    
     private $host = "https://api.favizone.com";
     private $accountUrl = "/user/add-account";
     private $initOrderUrl = "/order/init";

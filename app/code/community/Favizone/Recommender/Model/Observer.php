@@ -37,8 +37,8 @@ class Favizone_Recommender_Model_Observer
             $meta = Mage::getModel('favizone_recommender/meta_product');
             foreach ($product->getStoreIds() as $storeId) {
                 $store = Mage::app()->getStore($storeId);
-
-                if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData())){
+                $store_data = Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData();
+                if(!empty($store_data)){
 
    
                     // Load the product model for this particular store view.
@@ -67,7 +67,8 @@ class Favizone_Recommender_Model_Observer
             /** @var Mage_Catalog_Model_Product $product */
             $product = $observer->getEvent()->getProduct();
             foreach (Mage::app()->getStores() as $store) {
-                if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData()))
+                $store_info = Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData();
+                if(!empty($store_info))
                     Mage::helper('favizone_recommender/product')->updateTaggingProductData($product, 'delete', $store->getId());
             }
         }
@@ -85,7 +86,8 @@ class Favizone_Recommender_Model_Observer
         if (Mage::helper('favizone_recommender')->isModuleEnabled()) {
             $category = $observer->getEvent()->getCategory();
             foreach ($category->getStoreIds() as $storeId) {
-                if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($storeId)->getData())){
+                $store_info = Mage::helper('favizone_recommender/common')->getStoreInfo($storeId)->getData();
+                if(!empty($store_info)){
 
                     Mage::helper('favizone_recommender/category')->sendCategoryData((int)$category->getId(), 'update', (int)$storeId);
                 }
@@ -103,8 +105,9 @@ class Favizone_Recommender_Model_Observer
         if (Mage::helper('favizone_recommender')->isModuleEnabled()) {
 
             $category = $observer->getEvent()->getCategory();
+            $store_info = Mage::helper('favizone_recommender/common')->getStoreInfo($storeId)->getData();
             foreach ($category->getStoreIds() as $storeId) {
-                if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($storeId)->getData())){
+                if(!empty($store_info)){
 
                     Mage::helper('favizone_recommender/category')->sendCategoryData($category->getId(), 'delete', $storeId);
                 }
@@ -133,7 +136,8 @@ class Favizone_Recommender_Model_Observer
     public function sendAddToCartEvent(Varien_Event_Observer $observer){
         if (Mage::helper('favizone_recommender')->isModuleEnabled()) {
             $store = Mage::app()->getStore();
-            if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData())){
+            $store_info = Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId())->getData();
+            if(!empty($store_info)){
 
                 if (!$store->isAdmin()) {
                     $item = $observer->getEvent()->getQuoteItem();
@@ -161,7 +165,8 @@ class Favizone_Recommender_Model_Observer
         if (Mage::helper('favizone_recommender')->isModuleEnabled()) {
             $order = $observer->getEvent()->getOrder();
             $store = Mage::app()->getStore();
-            if(!empty(Mage::helper('favizone_recommender/common')->getStoreInfo($order->getStoreId())->getData())){
+            $store_info = Mage::helper('favizone_recommender/common')->getStoreInfo($order->getStoreId())->getData();
+            if(!empty($store_info)){
 
                 Mage::helper('favizone_recommender/order')->sendOrderData($order, $order->getStoreId(), $store->getId());
             }
@@ -183,9 +188,10 @@ class Favizone_Recommender_Model_Observer
              $stores = Mage::getModel('core/store')->getCollection()->addFieldToFilter('group_id',$groupId);
              $customer = $observer->getEvent()->getCustomer();
              foreach($stores as $store) {
-                 if(!empty($common_helper->getStoreInfo($store->getId())->getData())){
+                $store_info = $common_helper->getStoreInfo($store->getId())->getData();
+                if(!empty($store_info)){
                     if($common_helper->getSessionIdentifier($store->getId()) != "anonymous")
-                        Mage::helper('favizone_recommender/customer')->sendCustomerData($customer->getId(), $store->getId());
+                       Mage::helper('favizone_recommender/customer')->sendCustomerData($customer->getId(), $store->getId());
                  }
              }
         }

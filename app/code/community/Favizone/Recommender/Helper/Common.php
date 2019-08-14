@@ -31,8 +31,8 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             $store = Mage::app()->getStore();
             $store_id = $store->getId();
         }
-
-        if($cookie->get('favizone_connection_identifier_'.$store_id) && !empty($cookie->get('favizone_connection_identifier_'.$store_id)))
+        $cookie_data = $cookie->get('favizone_connection_identifier_'.$store_id);
+        if($cookie->get('favizone_connection_identifier_'.$store_id) && !empty($cookie_data))
             return $cookie->get('favizone_connection_identifier_'.$store_id);
         return "anonymous";
     }
@@ -221,7 +221,8 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
     public  function validateContext(){
 
         $store = $this->getStoreInfo( Mage::app()->getStore()->getId());
-        if(!empty($store->getData())){
+        $store_data = $store->getData();
+        if(!empty($store_data)){
             return true;
         }
         return false;
@@ -246,8 +247,8 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             $cookie->delete('favizone_preview');
             return false;
         }
-
-        if(!empty($cookie->get('favizone_preview')))
+        $preview_data = $cookie->get('favizone_preview');
+        if(!empty($preview_data))
             return true;
 
         return false;
@@ -309,7 +310,6 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
             $sender->postRequest($data->getInitABTestUrl(), $data_to_send);
         else
             $sender->postRequest($data->getEndABTestUrl(), $data_to_send);
-
     }
 
 
@@ -320,13 +320,9 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
      * @return Array() the categories list
      */
     public function resetData($store_id){
-        $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
-        try {
-            $transaction->beginTransaction();
-            $transaction->query('DELETE FROM favizone_recommender_access_key where store_id= '.$store_id);
-            $transaction->commit();
-        } catch (Exception $e) {
-            $transaction->rollBack(); // if anything goes wrong, this will undo all changes you made to your database
-        }
+
+        $element = $this->getStoreInfo($store_id);
+        if($element)
+            $element->delete();
     }
 }

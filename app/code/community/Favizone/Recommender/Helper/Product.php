@@ -19,7 +19,7 @@ class  Favizone_Recommender_Helper_Product extends Mage_Core_Helper_Abstract
     /**
      * @var int the limit of items to fetch.
      */
-    public $limit = 100;
+    public $limit = 500;
 
     /**
      * @var int the offset of items to fetch.
@@ -33,28 +33,41 @@ class  Favizone_Recommender_Helper_Product extends Mage_Core_Helper_Abstract
 
 			$init_done = false;
 			$number_products= $this->getCountAvailableProducts( $store->getId());
-            $pagination = $number_products/$this->limit;
-            $pagination = (int)$pagination;
-            if($number_products%$this->limit>0)
-                $pagination += 1;
-            $meta = Mage::getModel('favizone_recommender/meta_product');
-            /** Sending paginated products data **/
-            while($this->offset <= $pagination){
-                $products_collection = array();
-                foreach ($this->getPaginatedProducts($store->getId()) as $product){
+      $pagination = $number_products/$this->limit;
+      $pagination = (int)$pagination;
+      if($number_products%$this->limit>0)
+          $pagination += 1;
+      $meta = Mage::getModel('favizone_recommender/meta_product');
+      /** Sending paginated products data **/
+      while($this->offset <= $pagination){
+          $products_collection = array();
+          foreach ($this->getPaginatedProducts($store->getId()) as $product){
 
-                    $favizone_product= $meta->loadProductData($product, $store);
-                    array_push($products_collection, $favizone_product);
-                }
+              $favizone_product= $meta->loadProductData($product, $store);
+              array_push($products_collection, $favizone_product);
+          }
 
-                $this->offset += 1;
-                if($this->offset > $pagination)
-                    $init_done = true;
-                $this -> sendInitProductData($products_collection, $store->getId(), $init_done);
-            }
+          $this->offset += 1;
+          if($this->offset > $pagination)
+              $init_done = true;
+          $this -> sendInitProductData($products_collection, $store->getId(), $init_done);
+      }
 
 		return "done";
 	}
+
+  public function exportProducts($store, $limit, $offset){
+
+    $meta = Mage::getModel('favizone_recommender/meta_product');
+    //$products_collection = array();
+    $products_collection = "";
+    foreach ($this->getPaginatedProducts($store->getId(), $limit, $offset) as $product){
+      $favizone_product= $meta->loadProductDataToCsv($product, $store);
+      //array_push($products_collection, implode(",", $favizone_product));
+      $products_collection .=  $favizone_product."\r\n";
+    }
+    return $products_collection;
+  }
 
 	/**
 	 * Sends product's event data
@@ -104,24 +117,47 @@ class  Favizone_Recommender_Helper_Product extends Mage_Core_Helper_Abstract
 	 * gets  paginated products data
 	 *
 	 */
-	protected function getPaginatedProducts($store_id){
+	protected function getPaginatedProducts($store_id , $limitProducts = null, $offsetProducts = null){
+    if($limitProducts == null){
+      $limitProducts = $this->limit;
+    }
+    if($offsetProducts == null){
+      $offsetProducts = $this->offset;
+    }
+    $collection  = Mage::getModel('favizone_recommender/product')->getCollection();
+    $products = $collection
+                    ->setStore($store_id)
+                    ->addStoreFilter($store_id)
+                    ->addAttributeToSelect('*')
+                   ->addAttributeToFilter(
+                          'status', array(
+                              'eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+                          )
+                      )
+                      ->addFieldToFilter(
+                          'visibility',
+                          Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
+                      ) 
+                      ->addUrlRewrite()
+                      ->setPageSize($limitProducts)
+                      ->setCurPage($offsetProducts);
 
-		$products = Mage::getResourceModel('catalog/product_collection')
-            ->addStoreFilter($store_id)
-			->addAttributeToSelect('*')
-			->addAttributeToFilter(
-				'status', array(
-					'eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
-				)
-			)
-			->addFieldToFilter(
-				'visibility',
-				Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
-			)
+	/*	$products = Mage::getResourceModel('catalog/product_collection')
+           ->setStoreId($store_id)
+      			->addAttributeToSelect('*')
+      			->addAttributeToFilter(
+      				'status', array(
+      					'eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+      				)
+      			)
+      			->addFieldToFilter(
+      				'visibility',
+      				Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
+      			)
 
-			->addUrlRewrite()
-			->setPageSize($this->limit)
-			->setCurPage($this->offset);
+      			->addUrlRewrite()
+      			->setPageSize($limitProducts)
+      			->setCurPage($offsetProducts);*/
 
 
 		return $products;
@@ -130,19 +166,19 @@ class  Favizone_Recommender_Helper_Product extends Mage_Core_Helper_Abstract
 	/**
 	 * Gets all available products number
 	 */
-	protected function getCountAvailableProducts($store_id){
+	public function getCountAvailableProducts($store_id){
 
-        return Mage::getModel('catalog/product')->getCollection()
-            ->addStoreFilter($store_id)
-            ->addAttributeToFilter(
-                'status', array(
-                    'eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
-                )
-            )
-            ->addFieldToFilter(
-                'visibility',
-                Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
-            )->count();
+    $collection  = Mage::getModel('favizone_recommender/product')->getCollection();
+    return $collection->addStoreFilter($store_id)
+                   ->addAttributeToFilter(
+                          'status', array(
+                              'eq' => Mage_Catalog_Model_Product_Status::STATUS_ENABLED
+                          )
+                      )
+                      ->addFieldToFilter(
+                          'visibility',
+                          Mage_Catalog_Model_Product_Visibility::VISIBILITY_BOTH
+                      )->count();
 	}
 
 

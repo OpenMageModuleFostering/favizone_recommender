@@ -14,7 +14,13 @@
  * @author    Favizone Solutions Ltd <contact@favizone.com>
  * @copyright 2015-2016 Favizone Solutions Ltd
  */
-class Favizone_Recommender_Model_Product
+class Favizone_Recommender_Model_Product extends Mage_Catalog_Model_Product
 {
-
+ /**
+     * @inheritdoc
+     */
+    protected function _construct()
+    {
+        $this->_init('favizone_recommender/product');
+    }
 }

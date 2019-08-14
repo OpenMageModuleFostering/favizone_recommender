@@ -68,7 +68,6 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
             "key"=>$access_key,
             "categories"=>$this ->getAllCategories($store_id)
         );
-
         $sender->postRequest($data->getCategoryUrl(), $data_to_send);
     }
 
@@ -83,6 +82,7 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
         $rootCategoryId = Mage::app()->getStore($store_id)->getRootCategoryId();
         $categoriesCollection = Mage::getModel('catalog/category')
             ->getCollection()
+             ->setStore($store_id)
             ->addFieldToFilter('is_active', 1)
             ->addAttributeToFilter('path', array('like' => "1/{$rootCategoryId}/%"))
             ->addAttributeToSelect('*');
@@ -106,7 +106,7 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
         }
 
         //Root category
-        $rootCategory = Mage::getModel('catalog/category')->load($rootCategoryId);
+        $rootCategory = Mage::getModel('catalog/category')->setStoreId($store_id)->load($rootCategoryId);
         array_push($categories, array(
             "idLang"=>$store_id,
             "isoCode"=>$isoCode,

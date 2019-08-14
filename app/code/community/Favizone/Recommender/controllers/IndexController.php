@@ -19,6 +19,8 @@ class Favizone_Recommender_IndexController extends Mage_Core_Controller_Front_Ac
 {
     public function indexAction()
     {
-        echo "Favizone Recommender index";
+      echo $this->getRequest()->getParam('limit');
+    //  echo Mage::app()->getStore()->getId();
+    //  echo "Favizone Recommender index";
     }
 }

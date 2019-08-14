@@ -31,9 +31,9 @@ class Favizone_Recommender_Block_Adminhtml_AdminConfig extends Mage_Adminhtml_Bl
      */
     public function getAbTest()
     {
-        $accessKey = Mage::getModel('favizone_recommender/accessKey');
-        return $accessKey->getCollection()->getFirstItem()->getAbTest();
-
+        $store = Favizone_Recommender_Block_Common::getSelectedStore();
+        $element = Mage::helper('favizone_recommender/common')->getStoreInfo($store->getId());
+        return $element->getAbTest();
     }
 
     /**
@@ -58,7 +58,8 @@ class Favizone_Recommender_Block_Adminhtml_AdminConfig extends Mage_Adminhtml_Bl
         $store = Favizone_Recommender_Block_Common::getSelectedStore();
         if(isset($store)){
             $store_data = Mage::getModel('favizone_recommender/accessKey')->load($store->getId(), 'store_id');
-            return (!empty($store_data->getData()));
+            $key_data = $store_data->getData();
+            return (!empty($key_data));
         }
         return false;
     }
