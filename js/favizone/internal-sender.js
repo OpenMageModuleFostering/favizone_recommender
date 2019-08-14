@@ -83,12 +83,12 @@ setVisibleElements = function(indicator , callStep){
     }
 }
 
-sendResetRequest = function(url){
+sendResetRequest = function(url, store){
     try {
 
         new Ajax.Request(url, {
             method: "post",
-            parameters: "test=1",
+            parameters: "test=1"+"&&store="+store,
             onSuccess: function(response) {
                window.location.reload();
             }

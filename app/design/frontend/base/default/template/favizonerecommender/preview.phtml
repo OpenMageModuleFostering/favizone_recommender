@@ -19,22 +19,30 @@
         <div class="row">
             <div class="col-sm-6 col-md-6">
                 <a href="<?php echo Mage::helper('favizone_recommender/data')->getHost();?>" target="_blank">
-                    <img title="<?php echo $this->__('Go to my dashboard');?>" class="favizone_logo" src="<?php echo $this->getSkinUrl('images/favizone/logo-favizone.png',array('_package'=>'default','_area'=>'adminhtml'))?>">
+                    <img   title="<?php echo $this->__('Go to my dashboard');?>" class="favizone_logo" src="<?php echo $this->getSkinUrl('images/favizone/logo-favizone.png',array('_package'=>'default','_area'=>'adminhtml'))?>">
                 </a>
             </div>
             <div class="col-sm-6 col-md-6">
                 <div class="pull-right">
-                    <span class="favizone_move" id="favizone_preview_close">
-                    <img title=" <?php echo $this->__('End preview mode');?>" class="img-logo" src="<?php echo $this->getSkinUrl('images/favizone/close.png',array('_package'=>'default','_area'=>'adminhtml'))?>">
+                    <span class="favizone_move"  id="favizone_preview_setting" style="float: left;">
+                        <img class="img-logo" title="<?php echo $this->__('Minimize window');?>" 
+                            src="<?php echo $this->getSkinUrl('images/favizone/minimize.png',array('_package'=>'default','_area'=>'adminhtml'))?>"
+                        >
+                    </span>
+                    <span class="favizone_move" id="favizone_preview_close" style="float: left;">
+                        <img title=" <?php echo $this->__('End preview mode');?>" class="img-logo" src="<?php echo $this->getSkinUrl('images/favizone/close.png',array('_package'=>'default','_area'=>'adminhtml'))?>">
                     </span>
                 </div>
             </div>
-            <div class="col-sm-12 col-md-12 favizone_description">
-                <hr>
-                <p><?php echo $this->__("This is a demonstration  of Favizone's recommendations.");?>
-                    <a href="http://www.favizone.com/support" target="_blank" class="favizone-help"><?php echo $this->__("Help");?></a>
-                </p>
-                <p><?php echo $this->__("You can navigate on your store and view all Favizone's recommendations");?></p>
+            <div class="clearfix"></div>
+            <div class="col-sm-12 col-md-12" id="favizone_header" >
+                <div class="favizone_description">
+                    <p><?php echo $this->__("This is a demonstration  of Favizone's recommendations.");?>
+                        <a href="http://www.favizone.com/support" target="_blank" class="favizone-help"><?php echo $this->__("Help");?></a>
+                    </p>
+                    <p><?php echo $this->__("You can navigate on your store and view all Favizone's recommendations.");?></p>
+                     <p><?php echo $this->__("Please do not close this window until you finish your simulation on preview mode.");?></p>
+                </div>
             </div>
         </div>
     </div>

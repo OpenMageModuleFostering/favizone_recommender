@@ -8,6 +8,9 @@ function FavizoneAppender(element_gender, element_identifier){
 
     this.element_gender = element_gender;
     this.element_identifier = element_identifier;
+    /*
+    * Adding data for custom areas
+    */
     this.appendFavizoneElement = function(){
 
         var section = document.getElementById(this.element_identifier);

@@ -319,13 +319,11 @@ class  Favizone_Recommender_Helper_Common extends Mage_Core_Helper_Abstract
      * @param $store_id
      * @return Array() the categories list
      */
-    public function resetData(){
+    public function resetData($store_id){
         $transaction = Mage::getSingleton('core/resource')->getConnection('core_write');
         try {
             $transaction->beginTransaction();
-
-            $transaction->query('DELETE FROM favizone_recommender_access_key');
-
+            $transaction->query('DELETE FROM favizone_recommender_access_key where store_id= '.$store_id);
             $transaction->commit();
         } catch (Exception $e) {
             $transaction->rollBack(); // if anything goes wrong, this will undo all changes you made to your database

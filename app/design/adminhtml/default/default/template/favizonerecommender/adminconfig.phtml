@@ -83,17 +83,14 @@
                                         </div>
                                         <hr>
                                         <div class="row">
+                                            
                                             <div class="col-md-4 ">
                                                 <p>
-                                                    <a class="btn"  target="_blank" href="<?php echo Mage::helper('favizone_recommender/data')->getHost();?>/dashboard/index" ><i class="fa fa-bar-chart fa-2x"></i>  <?php echo $this->__('View my statistics');?> </a>
-                                                </p>
-                                            </div>
-                                            <div class="col-md-4 ">
-                                                <p>
-                                                    <a class="btn" target="_blank" href="<?php echo Mage::helper('favizone_recommender/data')->getHost();?>/profil"  ><i class="fa fa-user fa-2x"></i>
+                                                    <a class="btn" target="_blank" href="https://admin.favizone.com/login"  ><i class="fa fa-user fa-2x"></i>
                                                         <?php echo $this->__('Go to my profile');?> </a>
                                                 </p>
                                             </div>
+                                            <div class="col-md-4 "> </div>
                                             <div class="col-md-4 ">
                                                 <p>
                                                     <a class="btn" onclick="sendData('<?php echo $this->getUrl('*/*/sendCategoryData', array('isAjax' => true))?>', 'category-sync', <?php echo Favizone_Recommender_Block_Common::getSelectedStore()->getId(); ?>);" name="submitFavizoneCategories"><i class="fa fa-refresh fa-2x"></i><?php echo $this->__('Synchronize my categories'); ?> </a>
@@ -167,7 +164,7 @@
                                             </div>
                                         </div>
                                         <p class="terms-block">
-                                            <?php echo $this->__('By clicking you accept the') ;?>    <a target="_blank" href="www.favizone.com/terms">   <?php echo $this->__('the terms and conditions of Favizone') ;?>  </a>
+                                            <?php echo $this->__('By clicking you accept the') ;?>    <a target="_blank" href="http://www.favizone.com/terms/">   <?php echo $this->__('terms and conditions of Favizone') ;?>  </a>
                                         </p>
                                     </div>
                                 </div>
@@ -182,8 +179,9 @@
 <script type="text/javascript">
 function confirmWindow() {
     var url = "<?php echo $this->getUrl('*/*/resetData', array('isAjax' => true))?>";
-    if (confirm("<?php echo $this->__('This will remove all Favizone extension config data!');?>") == true) {
-       sendResetRequest(url);
+    var store = " <?php echo Favizone_Recommender_Block_Common::getSelectedStore()->getId(); ?>";
+    if (confirm("<?php echo $this->__('This will remove all Favizone extension config data for this store view !');?>") == true) {
+       sendResetRequest(url, store);
     }
 }
 </script>

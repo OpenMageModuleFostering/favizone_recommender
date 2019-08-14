@@ -18,8 +18,24 @@ function FavizoneHelper(){
         return "";
     }
 
-    this.setCookie = function(cname, cvalue) {
-        document.cookie = cname + "=" + cvalue +  "; path=/";
+    this.setCookie = function(cname, cvalue, expiry_time) {
+
+        var expires;
+        var path = "/";
+        var domain= window.location.hostname.split('.').reverse()[1] + "." +  window.location.hostname.split('.').reverse()[0] ;
+       
+        cookieStr = cname + "=" + escape(cvalue) + "; ";  
+        if(expiry_time){
+            expires = new Date();
+            expires = new Date(expires.getTime() + expiry_time * 1000);
+        }  else {
+            var today = new Date();
+            expires = new Date(today.getTime() + 15 * 24 * 60 * 60 * 1000);
+        }
+      
+        expires = expires.toGMTString();
+        document.cookie = this.setCookieParams(cname, cvalue, expires, path, window.location.hostname);
+        document.cookie = this.setCookieParams(cname, cvalue, expires, path, "."+window.location.hostname);
     }
 
     this.insertParam = function (paramName, paramValue)
@@ -44,5 +60,21 @@ function FavizoneHelper(){
         }
 
         return url;
+    }
+
+    this.setCookieParams = function(cname, cvalue, expires, path, domain){
+
+        var cookieStr = cname + "=" + escape(cvalue) + "; ";
+        if(expires){
+            cookieStr += "expires=" + expires + "; ";
+        }
+        if(path){
+            cookieStr += "path=" + path + "; ";
+        }
+        if(domain){
+            cookieStr += "domain=" + domain + "; ";
+        }
+
+        return cookieStr;
     }
 }

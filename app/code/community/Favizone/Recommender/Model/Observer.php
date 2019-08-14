@@ -184,8 +184,7 @@ class Favizone_Recommender_Model_Observer
              $customer = $observer->getEvent()->getCustomer();
              foreach($stores as $store) {
                  if(!empty($common_helper->getStoreInfo($store->getId())->getData())){
-
-                     if($common_helper->getSessionIdentifier($store->getId()) != "anonymous")
+                    if($common_helper->getSessionIdentifier($store->getId()) != "anonymous")
                         Mage::helper('favizone_recommender/customer')->sendCustomerData($customer->getId(), $store->getId());
                  }
              }

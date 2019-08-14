@@ -152,4 +152,10 @@ class Favizone_Recommender_Block_Tracker extends Mage_Core_Block_Template
 
         return $result;
     }
+
+    public function getCookiesExpirationTime(){
+       
+        $lifeTime = Mage::getModel('core/cookie')->getLifetime('favizone_visit_'.Mage::app()->getStore()->getId()) ;
+        return $lifeTime ;
+    }
 }

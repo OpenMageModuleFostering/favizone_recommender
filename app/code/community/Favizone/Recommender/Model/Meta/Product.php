@@ -28,7 +28,6 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
      */
     public function loadProductData(Mage_Catalog_Model_Product $product, Mage_Core_Model_Store $store, $wholeSale = true){
 
-
         $product_data =   array();
         $utcTz = new DateTimeZone("UTC");
 
@@ -42,9 +41,9 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
         $product_data['reference'] = $product->getSku();
 
         //description
-        $product_data['description'] = $product->getDescription();
+        $product_data['description'] = strip_tags($product->getDescription());
         //short description
-        $product_data['shortDescription']= $product->getShortDescription();
+        $product_data['shortDescription']= strip_tags($product->getShortDescription());
         
         //Price
         $product_data['price']= $this->getProductPrice($product);
@@ -106,13 +105,16 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
 
         $product_data['isNew'] = $this->isProductNew($product);
         if($product_data['isNew'] ){
-            $newFromDate = (new DateTime($product->getNewsFromDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT) ;
-            $newToDate   = (new DateTime( $product->getNewsToDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
-            $product_data['isNew_from_date'] = $newFromDate;
-            $product_data['isNew_to_date'] = $newToDate;
+            if($product->getNewsFromDate()){
+                $newFromDate = (new DateTime($product->getNewsFromDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT) ; 
+                $product_data['isNew_from_date'] = $newFromDate;
+            }
+            if($product->getNewsToDate()){
+                $newToDate   = (new DateTime( $product->getNewsToDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
+                $product_data['isNew_to_date'] = $newToDate;
+            }
         }
         $product_rule = $this->getProductRule($product, $store);
-        //$product_data['getSpecialPrice'] = $product->getSpecialPrice();
         if(!is_null($product->getSpecialPrice()) && !empty($product->getSpecialPrice())){
 
             $product_data['isReduced'] = true;
@@ -122,14 +124,22 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
             $product_data['price_without_reduction'] =Mage::helper('tax')
                                                         ->getPrice($product, $product->getPrice());
             $product_data['reduction'] =  $product_data['price_without_reduction'] - $product_data['price'];
-            $product_data['reduction_expiry_date'] = (new DateTime($product->getSpecialToDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
+            
+            if($product->getSpecialToDate()){
+                
+                $product_data['reduction_from_date'] = (new DateTime($product->getSpecialFromDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
+            }
+            
+            if($product->getSpecialToDate()){
+                
+                $product_data['reduction_expiry_date'] = (new DateTime($product->getSpecialToDate()))->setTimezone($utcTz)->format(self::DATE_FORMAT);
+            }
 
             $product_data['reduction_tax'] = true;//TTC
 
         }else{
             if(count($product_rule)>0){
 
-                //$tz = Mage::getStoreConfig(Mage_Core_Model_Locale::XML_PATH_DEFAULT_TIMEZONE);
                 $product_rule = $product_rule[0];
                 $product_data['isReduced'] = true;
                 $product_data['reduction'] = $product_rule ['action_amount'];
@@ -137,9 +147,15 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
                 if($product_rule ['action_amount']=='by_percent'){
                     $product_data['reduction_type'] = 'percentage';
                 }
-
-                $to_date = new DateTime('@'.$product_rule['to_time']);
-                $product_data['reduction_expiry_date'] = $to_date->setTimezone($utcTz)->format(self::DATE_FORMAT);
+                if($product_rule['from_time'] != 0 && $product_rule['from_time'] != '0'){
+                    $from_time = new DateTime('@'.$product_rule['from_time']);
+                    $product_data['reduction_from_date'] = $from_time->setTimezone($utcTz)->format(self::DATE_FORMAT);
+                }
+                if($product_rule['to_time'] != 0 && $product_rule['to_time'] != '0'){
+                    $to_date = new DateTime('@'.$product_rule['to_time']);
+                    $product_data['reduction_expiry_date'] = $to_date->setTimezone($utcTz)->format(self::DATE_FORMAT);
+                }
+               
                 $product_data['reduction_tax'] = true;//TTC
                 $product_data['price_without_reduction'] = Mage::helper('tax')
                                                              ->getPrice($product, $product->getPrice());
@@ -167,6 +183,11 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
                 }
             }          
         }
+        if($product->getTypeId() == "simple")
+            $product_data['hasDeclination'] = false;
+        else
+            $product_data['hasDeclination'] = true;
+
         if ($product->getData('type_id') == "configurable"){
           //get the configurable data from the product
             $config = $product->getTypeInstance(true);

@@ -134,12 +134,12 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
     }
 
     /**
-    * Reset data
+    * Reset Extension data
     */
     public  function resetDataAction(){
         $this->getResponse()->setHeader('Content-type', 'application/json');
         $store = Favizone_Recommender_Block_Common::getSelectedStore();
-        Mage::helper('favizone_recommender/common')->resetData();
+        Mage::helper('favizone_recommender/common')->resetData($store->getId());
        //Preparing response
         $responseData = array(
 

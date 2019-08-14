@@ -16,6 +16,7 @@
 ?>
 <?php if (Mage::helper('favizone_recommender/common')->validateContext()): ?>
 <script>
+
     var store_id = "<?php echo Mage::app()->getStore()->getId()?>";
     if(typeof(favizone_tracker)=='undefined'){
 
@@ -35,7 +36,8 @@
 
             visit_event  = "<?php echo $this->getVisitEvent()?>";
             favizone_events.push(visit_event);
-            favizone_searcher.setCookie("favizone_visit_"+store_id, "");
+            var expiry_date = "<?php echo $this->getCookiesExpirationTime();?>";
+           favizone_searcher.setCookie("favizone_visit_"+store_id, "", expiry_date);
         }
     }
     //searching for custom data in standards pages
