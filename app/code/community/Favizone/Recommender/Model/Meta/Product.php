@@ -363,10 +363,10 @@ class Favizone_Recommender_Model_Meta_Product extends Mage_Core_Model_Abstract{
         $groupPrices = $product->getData('group_price');
 
         if (is_null($groupPrices)) {
-            $attribute = $ProductObject->getResource()->getAttribute('group_price');
+            $attribute = $product->getResource()->getAttribute('group_price');
             if ($attribute){
-                $attribute->getBackend()->afterLoad($ProductObject);
-                $groupPrices = $ProductObject->getData('group_price');
+                $attribute->getBackend()->afterLoad($product);
+                $groupPrices = $product->getData('group_price');
             }
         }
 

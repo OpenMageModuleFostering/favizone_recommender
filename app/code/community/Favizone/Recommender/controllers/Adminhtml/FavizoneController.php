@@ -132,6 +132,22 @@ class Favizone_Recommender_Adminhtml_FavizoneController extends Mage_Adminhtml_C
         }
         $this->getResponse()->setBody(json_encode($responseData));
     }
+
+    /**
+    * Reset data
+    */
+    public  function resetDataAction(){
+        $this->getResponse()->setHeader('Content-type', 'application/json');
+        $store = Favizone_Recommender_Block_Common::getSelectedStore();
+        Mage::helper('favizone_recommender/common')->resetData();
+       //Preparing response
+        $responseData = array(
+
+            'success' => true,
+        );
+        $this->getResponse()->setBody(json_encode($responseData));
+    }
+
     /**
      * Returns the currently selected store view identifier.
      *

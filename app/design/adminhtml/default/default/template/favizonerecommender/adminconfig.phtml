@@ -7,6 +7,9 @@
     <?php echo $this->getChildHtml('store_switcher'); ?>
 <?php endif;?>
 <div class="container-fluid">
+    <a style="color:#00aff0 !important" href="#" onclick="confirmWindow()"  class="pull-right">
+       <i class="fa fa-refresh" ></i>  <?php echo $this->__("Reset Favizone extension data");?>
+    </a><br>
     <?php if ($this->isAccessKeyLoaded() ): ?>
         <div class="row">
             <div class="panel panel-default">
@@ -19,7 +22,7 @@
                                         <div class="login-block">
                                             <a target="_blank" href="http://www.favizone.com/support" class="pull-right">
                                                 <i class="fa fa-question-circle" ></i>  <?php echo $this->__('Help');?>
-                                            </a>
+                                            </a>                                
                                             <img class="img-logo" src="<?php echo $this->getSkinUrl('images/favizone/logo-favizone.png')?>">
                                             <div id="favizone_success_update" class="alert alert-success hide" role="alert">
                                                <?php echo $this->__('Data successfully updated.');?>
@@ -176,3 +179,11 @@
         </div>
     <?php endif;?>
 </div>
+<script type="text/javascript">
+function confirmWindow() {
+    var url = "<?php echo $this->getUrl('*/*/resetData', array('isAjax' => true))?>";
+    if (confirm("<?php echo $this->__('This will remove all Favizone extension config data!');?>") == true) {
+       sendResetRequest(url);
+    }
+}
+</script>
