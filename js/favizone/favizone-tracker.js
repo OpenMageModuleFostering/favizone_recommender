@@ -62,6 +62,9 @@ function Tracker(session, key, events, apiUrl){
         if(typeof(this.product_data) != "undefined"){
             sending_data['product'] = this.product_data;
         }
+        if(typeof(this.category_data) != "undefined"){
+            sending_data['category'] = this.category_data;
+        }
         /** End Preparing data **/
 
         var request = new XMLHttpRequest();

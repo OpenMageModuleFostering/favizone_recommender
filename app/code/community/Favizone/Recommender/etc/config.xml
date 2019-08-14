@@ -26,7 +26,7 @@
             names, with directory separators replaced by underscores
         -->
         <Favizone_Recommender>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </Favizone_Recommender>
     </modules>
     <global>

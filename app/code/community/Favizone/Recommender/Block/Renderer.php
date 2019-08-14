@@ -62,6 +62,7 @@ class Favizone_Recommender_Block_Renderer extends Mage_Core_Block_Template
         $sessionIdentifier = $helper->getSessionIdentifier();
         $test_version =  $helper->getTestingVersion();
         $accessKey = $helper->getApplicationKey();
+        $store = Mage::app()->getStore();
         if(!is_null($sessionIdentifier)){
             switch($canal){
                 case "product":
@@ -79,12 +80,13 @@ class Favizone_Recommender_Block_Renderer extends Mage_Core_Block_Template
                 case "category":
 
                     $category = Mage::registry('current_category');
+                    $path = Favizone_Recommender_Helper_Category::getCategoryPath($category->getPath(), $store->getId()) ;
                     $data_to_send =array( "key" => $accessKey,
                             "session" => $sessionIdentifier,
                             "event_params" => array( "version" => $test_version
                                                      ,"session" => $sessionIdentifier
                                                     ),
-                            "category" => $category->getId(),
+                            "category" => $path,
                             "cart" => $helper->getCurrentCart()
                         );
                     break;

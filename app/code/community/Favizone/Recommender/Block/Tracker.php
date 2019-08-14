@@ -63,8 +63,8 @@ class Favizone_Recommender_Block_Tracker extends Mage_Core_Block_Template
             case 'viewCategory':
                 $category = Mage::registry('current_category');
                 if($category){
-
-                    $event.= "viewCategory ".$category->getId()." 1 1";
+                    $path = str_replace(' ', "fz#", Favizone_Recommender_Helper_Category::getCategoryPath($category->getPath(), $store->getId())) ;
+                    $event.= "viewCategory ".$path." 1 1";
                     array_push($events, $event);
                 }
 
@@ -123,9 +123,11 @@ class Favizone_Recommender_Block_Tracker extends Mage_Core_Block_Template
         $store = Mage::app()->getStore();
         switch ($this->getEvent()){
             case 'viewCategory':
-                 $result['custom_event_key'] = $this->getEvent();
-                 $result['custom_event_value'] = Mage::registry('current_category')->getId();
-                 break;
+                $categoryData = Favizone_Recommender_Helper_Category::getCategoryData(Mage::registry('current_category')->getId(), $store->getId()) ;
+                $result['custom_event_key'] = $this->getEvent();
+                $result['custom_event_value'] = Mage::registry('current_category')->getId();
+                $result['category_data'] = $categoryData ;
+                break;
             case 'viewProduct':
                 $meta = Mage::getModel('favizone_recommender/meta_product');
                 $product = Mage::registry('current_product');

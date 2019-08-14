@@ -72,6 +72,43 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
     }
 
     /**
+     * Gets  category data
+     *
+     *@return array
+     */
+    public function getCategoryData($categoryId, $storeId){
+
+        $favizoneCategoryData = array();
+        $category = Mage::getModel('catalog/category')->setStoreId($storeId)->load($categoryId);
+        if(!is_null($category)){
+
+            $isoCode = substr(Mage::getStoreConfig('general/locale/code', $storeId),0,2);
+            $isRoot = 0;
+            if((int)$category->getLevel()== 1 || (int)$category->getLevel()== 0)
+                $isRoot = 1;
+            $path = Favizone_Recommender_Helper_Category::getCategoryPath($category->getPath(), $storeId) ;
+            $data = array(
+                    "idLang"=>$storeId,
+                    "isoCode"=>$isoCode,
+                    "idCategory"=>$path,
+                    "path"=>$path,
+                    "nameCategory"=>$category->getName(),
+                    "level"=>$category->getLevel(),
+                    "isCategoryRoot"=>$isRoot,
+                    "url"=>$category->getUrl()
+                );
+            //image
+            if($category->getImageUrl())
+                $data['image'] = $category->getImageUrl() ;
+            //parentCategory
+            $parent = Mage::getModel('catalog/category')->load($category->getParentId()) ;
+            $data['idParent'] = Favizone_Recommender_Helper_Category::getCategoryPath($parent->getPath(), $storeId) ;
+            array_push($favizoneCategoryData, $data);
+        }
+        return $favizoneCategoryData; 
+    }
+
+    /**
      * Gets all categories data
      *
      *@return array
@@ -94,31 +131,44 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
             $isRoot = 0;
             if((int)$category->getLevel()== 1 || (int)$category->getLevel()== 0)
                 $isRoot = 1;
-            array_push($categories, array(
-                "idLang"=>$store_id,
-                "isoCode"=>$isoCode,
-                "idCategory"=>$category->getId(),
-                "idParent"=>$category->getParentId(),
-                "nameCategory"=>$category->getName(),
-                "level"=>$category->getLevel(),
-                "image"=>($category->getImageUrl()?$category->getImageUrl():''),
-                "isCategoryRoot"=>$isRoot
-            ));
+            $path = Favizone_Recommender_Helper_Category::getCategoryPath($category->getPath(), $storeId);
+            $data = array(
+                    "idLang"=>$storeId,
+                    "isoCode"=>$isoCode,
+                    "idCategory"=>$path,
+                    "path"=>$path,
+                    "nameCategory"=>$category->getName(),
+                    "level"=>$category->getLevel(),
+                    "isCategoryRoot"=>$isRoot,
+                    "url"=>$category->getUrl()
+                );
+            //image
+            if($category->getImageUrl())
+                $data['image'] = $category->getImageUrl() ;
+            //parentCategory
+            $parent = Mage::getModel('catalog/category')->load($category->getParentId()) ;
+            $data['idParent'] = Favizone_Recommender_Helper_Category::getCategoryPath($parent->getPath(), $storeId) ;
+            array_push($categories, $data) ;
         }
 
         //Root category
         $rootCategory = Mage::getModel('catalog/category')->setStoreId($store_id)->load($rootCategoryId);
-        array_push($categories, array(
+        $path = Favizone_Recommender_Helper_Category::getCategoryPath($rootCategory->getPath(), $storeId) ;
+        $data = array(
             "idLang"=>$store_id,
             "isoCode"=>$isoCode,
-            "idCategory"=>$rootCategory->getId(),
+            "idCategory"=>$path,
+            "path"=>$path,
             "idParent"=>$rootCategory->getParentId(),
             "nameCategory"=>$rootCategory->getName(),
             "level"=>$rootCategory->getLevel(),
             "image"=>($rootCategory->getImageUrl()?$rootCategory->getImageUrl():''),
             "isCategoryRoot"=>1
-        ));
-
+        ) ;
+        //image
+        if($category->getImageUrl())
+            $data['image'] = $rootCategory->getImageUrl() ;  
+        array_push($categories, $data);
         /**
          * Sending categories data
          */
@@ -133,7 +183,6 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
     protected function getSingleCategoryData($categoryId, $storeId){
 
         $favizoneCategoryData = array();
-
         $category = Mage::getModel('catalog/category')->setStoreId($storeId)->load($categoryId);
         if(!is_null($category)){
 
@@ -141,19 +190,46 @@ class  Favizone_Recommender_Helper_Category extends Mage_Core_Helper_Abstract
             $isRoot = 0;
             if((int)$category->getLevel()== 1 || (int)$category->getLevel()== 0)
                 $isRoot = 1;
-            array_push($favizoneCategoryData, array(
+            
+            $path = Favizone_Recommender_Helper_Category::getCategoryPath($category->getPath(), $storeId) ;
+            $data = array(
                     "idLang"=>$storeId,
                     "isoCode"=>$isoCode,
-                    "idCategory"=>$category->getId(),
-                    "idParent"=>$category->getParentId(),
+                    "idCategory"=>$path,
+                    "path"=>$path,
                     "nameCategory"=>$category->getName(),
                     "level"=>$category->getLevel(),
-                    "image"=>($category->getImageUrl()?$category->getImageUrl():''),
-                    "isCategoryRoot"=>$isRoot
-                )
-            );
+                    "isCategoryRoot"=>$isRoot,
+                    "url"=>$category->getUrl()
+                );
+            //image
+            if($category->getImageUrl())
+                $data['image'] = $category->getImageUrl() ;
+            //parentCategory
+            $parent = Mage::getModel('catalog/category')->load($category->getParentId()) ;
+            $data['idParent'] = Favizone_Recommender_Helper_Category::getCategoryPath($parent->getPath(), $storeId) ;
+            array_push($favizoneCategoryData, $data);
+        }
+        return $favizoneCategoryData;
+    }
+
+    public function getCategoryPath($pathStructure, $storeId){
+
+        $pathIds = explode('/', $pathStructure);            
+        $collection = Mage::getModel('catalog/category')->getCollection()
+            ->setStoreId($storeId)
+            ->addAttributeToSelect('name')
+            ->addAttributeToSelect('is_active')
+            ->addFieldToFilter('entity_id', array('in' => $pathIds));
+
+        $pahtByName = '';
+        foreach($collection as $cat){                
+            $pahtByName .= '/' . $cat->getName();
         }
 
-        return $favizoneCategoryData;
+        if($pahtByName[0]==='/')
+            $pahtByName = substr($pahtByName, 1);
+
+        return $pahtByName ;
     }
 }
