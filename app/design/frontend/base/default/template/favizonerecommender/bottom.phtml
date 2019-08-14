@@ -1,0 +1,55 @@
+<?php
+/**
+ * 2016 Favizone Solutions Ltd
+ *
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com  for more information.
+ *
+ *
+ * @category  Favizone
+ * @package   Favizone_Recommender
+ * @author    Favizone Solutions Ltd <contact@favizone.com>
+ * @copyright 2015-2016 Favizone Solutions Ltd
+ */
+?>
+<?php if (Mage::helper('favizone_recommender/common')->validateContext()): ?>
+<script>
+    var store_id = "<?php echo Mage::app()->getStore()->getId()?>";
+    if(typeof(favizone_tracker)=='undefined'){
+
+        var api_url = "<?php echo Mage::helper('favizone_recommender/data')->getSendEventUrl()?>";
+        var key = "<?php echo Mage::helper('favizone_recommender/common')->getApplicationKey()?>";
+        var session = "<?php echo Mage::helper('favizone_recommender/common')->getSessionIdentifier()?>";
+        var favizone_events = <?php echo json_encode($this->TrackerEvents()); ?>;
+        var favizone_tracker = new  Tracker(session, key, favizone_events, api_url);
+    }
+    //searching for new visits in standards pages
+    if(typeof (FavizoneHelper) != "undefined"){
+
+        var favizone_searcher = new FavizoneHelper();
+        var store_id = "<?php echo Mage::app()->getStore()->getId()?>";
+        var visit_event  =favizone_searcher.getCookie("favizone_visit_"+store_id);
+        if(visit_event  && visit_event!=""){
+
+            visit_event  = "<?php echo $this->getVisitEvent()?>";
+            favizone_events.push(visit_event);
+            favizone_searcher.setCookie("favizone_visit_"+store_id, "");
+        }
+    }
+    //searching for custom data in standards pages
+    var custom_data = <?php echo json_encode($this->getCustomData());?>;
+    if(custom_data){
+        if(custom_data.search_campaign){
+            favizone_tracker.search_campaign_value = custom_data.search_campaign_value;
+        }
+        if(custom_data.search_engine){
+            favizone_tracker.search_engine_value = custom_data.search_engine_value;
+        }
+    }
+
+    if(favizone_events.length>0)
+        favizone_tracker.sendAction();
+</script>
+<?php endif?>

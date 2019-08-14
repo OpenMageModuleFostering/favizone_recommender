@@ -1,0 +1,273 @@
+/*
+* 2016 Favizone Solutions Ltd
+*
+* @author    Favizone Solutions Ltd <contact@favizone.com>
+* @copyright 2015-2016 Favizone Solutions Ltd
+*/
+.row {margin-left: -5px;
+    margin-right: -5px;
+    background: none;}
+
+.row:after{
+    clear: both;
+}
+
+.row:before{
+    content: " ";
+    display: table;
+}
+ 
+.row:last-child{padding-bottom: 20px;}
+ .panel, .panel-default{
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: solid 1px #e6e6e6;
+    background-color: #fff;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -webkit-box-shadow: rgba(0,0,0,0.1) 0 2px 0,#fff 0 0 0 3px inset;
+    box-shadow: rgba(0,0,0,0.1) 0 2px 0,#fff 0 0 0 3px inset;
+     border: solid 1px #ddd;
+    -webkit-box-shadow: rgba(0,0,0,0.1) 0 2px 0,#fff 0 0 0 3px inset;
+    box-shadow: rgba(0,0,0,0.1) 0 2px 0,#fff 0 0 0 3px inset;
+}
+.panel p {
+    margin: 0 0 8.5px;
+}
+.panel * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+.h4 {
+    font-size: 15px;
+    font: 400 12px/1.42857 "Open Sans",Helvetica,Arial,sans-serif;
+    color: #555;
+    background-color: #fff;
+    -webkit-tap-highlight-color: transparent;
+}
+ h1{   font-size: 31px;}
+
+ h1, .h1, h2, .h2, h3, .h3 {
+    margin-top: 17px;
+    margin-bottom: 8.5px;
+    font-family: "Ubuntu Condensed",Helvetica,Arial,sans-serif;
+    font-weight: 400;
+    line-height: 1.1;
+    color: #555;
+    }
+.panel .text-center {
+    text-align: center;
+}
+.panel a {
+    color: #00aff0;
+    text-decoration: none;
+}
+.panel-body {
+    padding: 15px;
+}
+.panel-body:after {
+    content: " ";
+    display: table;
+}
+.login-block{
+	text-align: center;
+}
+.form-group {
+    margin-left: -5px;
+    margin-right: -5px;
+        margin-bottom: 15px; 
+}
+.form-group:before, .form-group:after {
+    content: " ";
+    display: table;
+}
+.form-group .control-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 5px;
+    font-size: 13px;
+    font-weight: normal;
+    color: #666;
+}
+.form-group input[type="text"], .bootstrap input[type="search"], .bootstrap input[type="password"], .bootstrap textarea, .bootstrap select {
+    display: block;
+    width: 100%; 
+    padding: 4px 8px;
+    font-size: 12px;
+    line-height: 1.42857;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    -webkit-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s,box-shadow ease-in-out 0.15s;
+}
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -ms-touch-action: manipulation;
+    touch-action: manipulation;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-image: none;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+.btn-default {
+    color: #333;
+    background-color: #fff;
+    border-color: #ccc;
+}
+.btn.btn-default:hover {
+    color: #fff;
+    background-color: #00aff0;
+    border-color: #008abd;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+.help-block {
+display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #959595;
+    text-align: center;
+}
+.help-block {
+    font-style: italic;
+}
+.switch {
+    display: block;
+    height: 26px;
+    position: relative;
+}
+.width-lg {
+    width: 160px !important;
+}
+.switch input {
+ 
+}
+.fa-2x {
+    font-size: 2em;
+}
+.icon-refresh:before, #content .process-icon-update:before, #content .process-icon-refresh:before, .bootstrap #dashboard .loading .data_value:before, .bootstrap #employee-thumbnail:before {
+    content: "";
+}
+.panel input[type="radio"], .bootstrap input[type="checkbox"] {
+    float: left;
+ 
+}
+.panel hr {
+    margin-top: 17px;
+    margin-bottom: 17px;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+.prestashop-switch label {
+    text-transform: uppercase;
+    color: #bbb;
+    font-weight: 400;
+    cursor: pointer;
+    -webkit-transition: color 0.2s ease-out;
+    -o-transition: color 0.2s ease-out;
+    transition: color 0.2s ease-out;
+        float: left;
+        width: auto;
+}
+input#ab_test_off {
+    float: left;
+}
+.hide {
+    display: none !important;
+}
+.panel .col-md-4,.panel .col-sm-11, .panel .col-md-11, .panel .col-lg-11, .panel .col-xs-12,
+           .panel .col-sm-12, .panel .col-md-12, .panel .col-lg-12 {
+    position: relative;
+    min-height: 1px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.panel .col-md-12{width: 100%;}
+ 
+  
+ .col-lg-3 {
+    width: 25%;
+}
+.col-md-4 {
+    width: 33.33333%;
+}
+.col-lg-5  {
+
+}
+ .col-lg-5 {
+    width: 41.66667%;
+}
+
+#favizone_preview_section p {
+    color: #777777 !important;
+    text-align: center !important; ;
+}
+.favizone_description {
+    clear:both !important;
+}
+.favizone_move{
+    cursor: move!important;
+}
+.favizone_logo {
+    width: 50%;
+}
+.favizone-help{
+    color: #ec751e !important;
+}
+.favizone_preview{
+
+    -webkit-box-shadow: 5px 3px 64px -4px rgba(0,0,0,0.41);
+    -moz-box-shadow: 5px 3px 64px -4px rgba(0,0,0,0.41);
+    box-shadow: 5px 3px 64px -4px rgba(0,0,0,0.41);
+    -webkit-border-radius: 12px;
+    -moz-border-radius: 12px ;
+    border-radius: 12px !important;
+    width:45%;
+    position:fixed !important;
+    top: 0px;
+    z-index: 9999;
+    border: none !important;
+    height: 150px;
+    left: 25%;
+
+}
+#favizone_preview_section hr {
+    border: 0 !important;
+    height: 1px !important;
+    background: #333 !important;
+    background-image: linear-gradient(to right, #ccc, #333, #ccc) !important;
+}
+#favizone_preview_section .panel-body {
+    padding: 0px !important;
+}
+.col-sm-6.col-md-6 {
+    float: left;
+    width: 50%;
+}
+.pull-right{
+    float: right;
+}
+@media (min-width: 992px){
+    .col-md-4, .col-md-3, .col-md-5, .col-lg-5, .col-lg-3{float: left;}
+ }
+

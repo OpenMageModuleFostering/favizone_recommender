@@ -1,0 +1,16 @@
+{
+    "name": "OpenMageModuleFostering/Favizone_Recommender",
+    "type": "magento-module",
+    "license": "Favizone",
+    "homepage": "",
+    "description": "Personalization for Magento",
+    "authors": [
+    {
+        "name": "Favizone",
+        "email": "contact@favizone.com"
+    }
+],
+    "suggest": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}

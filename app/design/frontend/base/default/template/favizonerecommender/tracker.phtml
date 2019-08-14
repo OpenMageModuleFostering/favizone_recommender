@@ -1,0 +1,70 @@
+<?php
+/**
+ * 2016 Favizone Solutions Ltd
+ *
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com  for more information.
+ *
+ *
+ * @category  Favizone
+ * @package   Favizone_Recommender
+ * @author    Favizone Solutions Ltd <contact@favizone.com>
+ * @copyright 2015-2016 Favizone Solutions Ltd
+ */
+?>
+<?php if (Mage::helper('favizone_recommender/common')->validateContext()): ?>
+<script>
+    var api_url = "<?php echo Mage::helper('favizone_recommender/data')->getSendEventUrl()?>";
+    var key = "<?php echo Mage::helper('favizone_recommender/common')->getApplicationKey()?>";
+    var session = "<?php echo Mage::helper('favizone_recommender/common')->getSessionIdentifier()?>";
+    var favizone_events = <?php echo json_encode($this->TrackerEvents()); ?>;
+    
+    //searching custom events in the specific pages
+    if(typeof (FavizoneHelper) != "undefined"){
+
+        var favizone_searcher = new FavizoneHelper();
+        var favizone_product_id = favizone_searcher.getCookie("favizone_id_product");
+       
+        if(typeof(visit_event)  == "undefined"){
+            var store_id = "<?php echo Mage::app()->getStore()->getId()?>";
+            var visit_event  =favizone_searcher.getCookie("favizone_visit_"+store_id);
+            if(visit_event  && visit_event!=""){
+
+                visit_event  = "<?php echo $this->getVisitEvent()?>";
+                favizone_events.push(visit_event);
+                favizone_searcher.setCookie("favizone_visit_"+store_id, "");
+            }
+        }
+        
+        var favizone_id_recommendor = favizone_searcher.getCookie("favizone_id_recommendor");
+        if(favizone_product_id && favizone_id_recommendor && favizone_product_id!="" && favizone_id_recommendor!=""){
+
+            var favizone_click_event =  "<?php echo $this->getTrackerEventByKey('click')?>";
+            favizone_click_event+= favizone_product_id+" 1 1 "+favizone_id_recommendor;
+            favizone_events.push(favizone_click_event);
+            favizone_searcher.setCookie("favizone_id_product", "");
+            favizone_searcher.setCookie("favizone_id_recommendor", "");
+        }
+    }
+    
+    var favizone_tracker = new  Tracker(session, key, favizone_events, api_url);
+    var custom_data = <?php echo json_encode($this->getCustomData());?>;
+    
+    //searching for custom data in the specific pages
+    if(custom_data){
+       if(custom_data.custom_event_key){
+
+            favizone_tracker.custom_event_key =  custom_data.custom_event_key;
+            favizone_tracker.custom_event_value = custom_data.custom_event_value;
+        }
+        if(custom_data.product_data){
+            favizone_tracker.product_data = custom_data.product_data;
+        }
+        if(custom_data.user_data){
+            favizone_tracker.user_data = custom_data.user_data;
+        }
+    }
+</script>
+<?php  endif;?>

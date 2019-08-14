@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<!--
+ * 2016 Favizone Solutions Ltd
+ *
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com  for more information.
+ *
+ *
+ * @category  Favizone
+ * @package   Favizone_Recommender
+ * @author    Favizone Solutions Ltd <contact@favizone.com>
+ * @copyright 2015-2016 Favizone Solutions Ltd
+ *
+-->
+<layout version="1.0.0">
+
+    <!-- Store wide blocks -->
+    <default>
+        <reference name="head">
+            <action method="addJs">
+                <script>favizone/favizone-helper.js</script>
+            </action>
+            <action method="addJs">
+                <script>favizone/favizone-tracker.js</script>
+            </action>
+            <action method="addJs">
+                <script>favizone/favizone-renderer.js</script>
+            </action>
+        </reference>
+    </default>
+    <!--                                       -->
+    <!-- Adding Favizone elements to site      -->
+    <!--                                       -->
+
+    <!-- All pages -->
+    <default>
+
+    </default>
+    <!-- Custom handle for displaying 1 content placeholder last in page content section -->
+    <favizone_recommender_page_default_footer>
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.common" after="-"
+                   template="favizonerecommender/footer.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_footer_element</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/tracker" name="favizone.page.bottom" template="favizonerecommender/bottom.phtml">
+            </block>
+        </reference>
+        <!--- Adds block for other/error pages -->
+        <reference name="content">
+            <block type="favizone_recommender/custom" name="favizone.page.other" after="-"
+                   template="favizonerecommender/custom.phtml">
+            </block>
+        </reference>
+    </favizone_recommender_page_default_footer>
+
+    <!-- Product page -->
+    <catalog_product_view>
+        <reference name="head">
+            <block type="favizone_recommender/tracker" name="favizone.product.tracker" template="favizonerecommender/tracker.phtml">
+                <action method="setData">
+                    <name>event</name>
+                    <value>viewProduct</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/renderer" name="favizone.product.renderer" template="favizonerecommender/renderer.phtml">
+                <action method="setData">
+                    <name>canal</name>
+                    <value>product</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.product" after="product.info"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_product_element</value>
+                </action>
+            </block>
+        </reference>
+    </catalog_product_view>
+
+    <!-- Home page -->
+    <cms_index_index>
+        <reference name="after_body_start">
+            <block type="favizone_recommender/renderer" name="favizone.page.index.renderer" template="favizonerecommender/renderer.phtml">
+                <action method="setData">
+                    <name>canal</name>
+                    <value>home</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.index.top" before="-"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_home_top_element</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/common" name="favizone.page.index.bottom" after="-"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_home_bottom_element</value>
+                </action>
+            </block>
+        </reference>
+    </cms_index_index>
+
+    <!-- Category page -->
+    <catalog_category_view>
+        <reference name="after_body_start">
+            <block type="favizone_recommender/tracker" name="favizone.category.tracker" template="favizonerecommender/tracker.phtml">
+                <action method="setData">
+                    <name>event</name>
+                    <value>viewCategory</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/renderer" name="favizone.category.renderer" template="favizonerecommender/renderer.phtml">
+                <action method="setData">
+                    <name>canal</name>
+                    <value>category</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.categorytop" before="-"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_category_top_element</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/common" name="favizone.page.categorybottom" after="category.products"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_category_bottom_element</value>
+                </action>
+            </block>
+        </reference>
+    </catalog_category_view>
+    <!-- Search result page -->
+    <catalogsearch_result_index>
+        <reference name="after_body_start">
+            <block type="favizone_recommender/tracker" name="favizone.search.tracker" template="favizonerecommender/tracker.phtml">
+                <action method="setData">
+                    <name>event</name>
+                    <value>doSearch</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/renderer" name="favizone.search.renderer" template="favizonerecommender/renderer.phtml">
+                <action method="setData">
+                    <name>canal</name>
+                    <value>search</value>
+                </action>
+            </block>
+        </reference>
+        <!-- Adds 2 blocks; 1 before and 1 after the search result -->
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.searchtop" before="search.result"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_search_top_element</value>
+                </action>
+            </block>
+            <block type="favizone_recommender/common" name="favizone.page.searchbottom" after="search.result"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_search_bottom_element</value>
+                </action>
+            </block>
+        </reference>
+    </catalogsearch_result_index>
+    <!-- Shopping cart checkout page -->
+    <checkout_cart_index>
+        <reference name="after_body_start">
+            <block type="favizone_recommender/renderer" name="favizone.cart.renderer" template="favizonerecommender/renderer.phtml">
+                <action method="setData">
+                    <name>canal</name>
+                    <value>cart</value>
+                </action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="favizone_recommender/common" name="favizone.page.cart.top" before="checkout.cart"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_cart_top_element</value>
+                </action>
+
+            </block>
+            <block type="favizone_recommender/common" name="favizone.page.cart.bottom" after="checkout.cart"
+                   template="favizonerecommender/common.phtml">
+                <action method="setData">
+                    <name>div_identifier</name>
+                    <value>favizone_cart_bottom_element</value>
+                </action>
+            </block>
+        </reference>
+    </checkout_cart_index>
+</layout>
