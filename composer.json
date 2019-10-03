@@ -1,7 +1,7 @@
 {
-    "name": "OpenMageModuleFostering\/Favizone_Recommender",
+    "name": "openmage-module-fostering\/favizone_recommender",
     "type": "magento-module",
-    "license": "Favizone",
+    "license": "OSL-3.0",
     "homepage": "",
     "description": "Personalization for Magento",
     "authors": [
